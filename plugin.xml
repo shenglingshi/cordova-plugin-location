@@ -21,15 +21,22 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com-amap-location"
-    version="1.0.22">
-    <name>Location</name>
+    id="cordova-amap-location"
+    version="1.0.6">
+    <name>cordova-amap-location</name>
     <description>Cordova Location Plugin By AMap</description>
     <license>Apache 2.0</license>
-    <keywords>cordova,location</keywords>
+    <keywords>cordova,location, aMap</keywords>
 
-    <js-module src="www/location.js" name="Location">
-        <clobbers target="window.xunsoft" />
+    <preference name="ANDROID_KEY" />
+    <preference name="IOS_KEY" />
+
+    <engines>
+        <engine name="cordova" version=">=3.0.0"/>
+    </engines>
+
+    <js-module src="www/location.js" name="AMapLocation">
+        <clobbers target="window.plugins.aMapLocationPlugin" />
     </js-module>
 
     <!-- android -->
@@ -46,53 +53,45 @@
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <service android:name="com.amap.api.location.APSService"></service>   
-            <meta-data android:name="com.amap.api.v2.apikey" android:value="API KEY"></meta-data> 
+            <meta-data android:name="com.amap.api.v2.apikey" android:value="$ANDROID_KEY"></meta-data> 
         </config-file>
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="Location" >
-                <param name="android-package" value="com.xunsoft.location.Location"/>
+            <feature name="AMapLocation" >
+                <param name="android-package" value="com.phonegap.plugins.aMapLocation.Location"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/com/xunsoft/location/Location.java" target-dir="src/com/xunsoft/location" />
-        <source-file src="src/android/AMap_Location_V2.8.0_20160811.jar" target-dir="libs" />
+        <source-file src="src/android/Location.java" target-dir="src/com/phonegap/plugins/aMapLocation" />
+        <source-file src="src/android/AMap_Location_V4.0.1_20180426.jar" target-dir="libs" />
     </platform>
 
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-            <feature name="Location">
-                <param name="ios-package" value="AmapLocation" />
+            <feature name="AMapLocation">
+                <param name="ios-package" value="AMapLocation" />
             </feature>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
-            <string>表示应用在前台和后台（suspend 或 terminated）都可以获取到更新的位置数据</string>
+        <config-file target="*-Info.plist" parent="AMapAppKey">
+          <string>$IOS_KEY</string>
         </config-file>
 
-        <header-file src="src/ios/lib/AMapFoundationKit/Headers/AMapFoundationKit.h" />
-        <header-file src="src/ios/lib/AMapFoundationKit/Headers/AMapFoundationVersion.h" />
-        <header-file src="src/ios/lib/AMapFoundationKit/Headers/AMapServices.h" />
-        <header-file src="src/ios/lib/AMapFoundationKit/Headers/AMapURLSearch.h" />
-        <header-file src="src/ios/lib/AMapFoundationKit/Headers/AMapURLSearchConfig.h" />
-        <header-file src="src/ios/lib/AMapFoundationKit/Headers/AMapURLSearchType.h" />
-        <header-file src="src/ios/lib/AMapFoundationKit/Headers/AMapUtility.h" />
-
-        <header-file src="src/ios/lib/AMapLocationKit/Headers/AMapLocationCommonObj.h" />
-        <header-file src="src/ios/lib/AMapLocationKit/Headers/AMapLocationKit.h" />
-        <header-file src="src/ios/lib/AMapLocationKit/Headers/AMapLocationManager.h" />
-        <header-file src="src/ios/lib/AMapLocationKit/Headers/AMapLocationRegionObj.h" />
-        <header-file src="src/ios/lib/AMapLocationKit/Headers/AMapLocationVersion.h" />
+        <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+            <string>获取位置信息</string>
+        </config-file>
 
         <header-file src="src/ios/AMapLocation.h" />
         <source-file src="src/ios/AMapLocation.m" />
 
-        <framework src="src/ios/lib/AMapFoundationKit/AMapFoundationKit.framework" />
-        <framework src="src/ios/lib/AMapLocationKit/AMapLocationKit.framework" />
+        <framework src="src/ios/lib/AMapFoundationKit.framework"  custom="true"/>
+        <framework src="src/ios/lib/AMapLocationKit.framework"  custom="true"/>
+        <framework src="JavaScriptcore.framework" />
         <framework src="SystemConfiguration.framework" />
-        <framework src="CoreTeleohony.framework" />
-        <framework src="libz.dylib" />
-        <framework src="libstdc++6.09.dylib" />
-        <framework src="libc++.dylib" />
+        <framework src="CoreTelephony.framework" />
+        <framework src="Security.framework" />
+        <framework src="libz.tbd" />
+        <framework src="libc++.tbd" />
+        <framework src="libstdc++.6.0.9.tbd" />
     </platform>
 </plugin>

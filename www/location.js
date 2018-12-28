@@ -1,18 +1,28 @@
-var exec = cordova.require('cordova/exec');
-module.exports = {
-    getCurrentPosition: function(success, error, args) { 
-    	console.log('getCurrentPosition');    
-        exec(success, error, "Location", "getCurrentPosition", []);
-    },
-
-    watchPosition: function(success, error, args) {
-        console.log('watchPosition');    
-        exec(success, error, "Location", "watchPosition", []);
-    },
-
-    clearWatch: function(pluginWatchId) {
-       console.log('clearWatch'); 
-       exec(success, error, "Location", "clearWatch", [pluginWatchId]);
-    }
+var AMapLocationPlugin = function () {
 };
 
+AMapLocationPlugin.prototype.call_native = function (name, args, success ,error) {
+    cordova.exec(success, error, 'AMapLocation', name, args);
+};
+
+AMapLocationPlugin.prototype.getCurrentPosition = function (success ,error) {
+    this.call_native("getCurrentPosition", [], success ,error);
+};
+
+AMapLocationPlugin.prototype.watchPosition = function (success ,error, interval) {
+    this.call_native("watchPosition", [interval], success ,error);
+};
+
+AMapLocationPlugin.prototype.clearWatch = function (success ,error) {
+    this.call_native("clearWatch", [], success ,error);
+};
+
+if (!window.plugins) {
+    window.plugins = {};
+}
+
+if (!window.plugins.aMapLocationPlugin) {
+    window.plugins.aMapLocationPlugin = new AMapLocationPlugin();
+}
+
+module.exports = new AMapLocationPlugin();
